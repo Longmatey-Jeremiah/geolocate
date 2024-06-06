@@ -1,4 +1,4 @@
-export const APP_LOGO = require('../assets/geolocate.jpg');
+export const APP_LOGO = require('../assets/geolocate-logo.jpg');
 
 export const AVATAR = require('../assets/9440461.jpg');
 

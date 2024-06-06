@@ -5,7 +5,7 @@ import { APP_LOGO, APP_NAME } from '../../../constants';
 function PageTitle() {
   return (
     <Center>
-      <Image source={APP_LOGO} alt="arrow-left" />
+      <Image source={APP_LOGO} alt="app-logo" boxSize={12} rounded="3xl" />
       <Text color="primary.100" fontSize={16} fontWeight={700} lineHeight="28px">
         {APP_NAME}
       </Text>
