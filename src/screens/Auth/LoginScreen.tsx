@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AuthLayout from '../../layouts/AuthLayout';
 import { Button, Heading, Input, PageTitle } from '../../components/ui';
 import { Box, Center, Text, VStack } from 'native-base';
@@ -11,13 +11,8 @@ import { setTokens, setUser } from '../../store/auth.slice';
 
 export function LoginScreen(navigation: any) {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSignInPressed = (data: any) => {
-    dispatch(setIsAuthenticated(true));
-    dispatch(setTokens(data.token));
-    dispatch(setUser(data.user));
-    // navigation.navigate({ name: RouteNames.DASHBOARD });
-  };
   const {
     control,
     handleSubmit,
@@ -27,13 +22,16 @@ export function LoginScreen(navigation: any) {
   console.log(errors);
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     try {
       const response = await login(data.email, data.password);
-      onSignInPressed(response);
-      console.log('User: ', response);
-      navigation.navigate({ name: RouteNames.DASHBOARD });
+
+      dispatch(setTokens(response.token));
+      dispatch(setUser(response.user));
+      dispatch(setIsAuthenticated(true));
+      setIsLoading(false);
     } catch (error) {
-      console.log('Login error', error);
+      setIsLoading(false);
     }
   };
 
@@ -97,7 +95,9 @@ export function LoginScreen(navigation: any) {
               )}
             />
 
-            <Button onPress={handleSubmit(onSubmit)}>Continue</Button>
+            <Button onPress={handleSubmit(onSubmit)} isLoading={isLoading}>
+              Continue
+            </Button>
           </VStack>
         </Box>
       </VStack>

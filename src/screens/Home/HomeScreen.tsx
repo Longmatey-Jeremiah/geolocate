@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Box, HStack, Text, VStack, Image, Icon, Spinner } from 'native-base';
+import { Box, HStack, Text, VStack, Image, Icon, Spinner, Alert } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEntrepriseId, setIsAuthenticated } from '../../store';
+import { setEntrepriseId } from '../../store';
 import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import { getCompanies } from '../../services';
-import { EvilIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { HomeHeader } from './HomeHeader';
-// import { RouteNames } from '../../constants';
+import { EvilIcons } from '@expo/vector-icons';
+import { HomeHeader } from './components/HomeHeader';
+import { RouteNames } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import { WelcomeAlert } from './components/WelcomeAlert';
 
 interface Company {
   id: number;
@@ -16,24 +18,22 @@ interface Company {
   phone: string;
 }
 
-interface ApiResponse {
-  _embedded: {
-    entrepriseDTOModelList: Company[];
-  };
-}
-
 function HomeScreen() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [companies, setCompanies] = useState<Company[]>([]);
   const data = useSelector((state) => state?.company.entreprise.id);
   const user = useSelector((state) => state?.auth.user);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchCompanies = async () => {
       setIsLoading(true);
       try {
         const response = await getCompanies();
+        // const map_response = response.forEach((item) => {
+        //   item;
+        // });
         setCompanies(response._embedded.entrepriseDTOModelList);
         setIsLoading(false);
       } catch (error) {
@@ -48,7 +48,7 @@ function HomeScreen() {
   const viewLocation = async (entrepriseId: number) => {
     dispatch(setEntrepriseId(entrepriseId));
     console.log('Entreprise Id:', data);
-    // navigation.navigate({ name: RouteNames.PROFILE });
+    navigation.navigate(RouteNames.MAP);
   };
 
   return (
@@ -57,6 +57,7 @@ function HomeScreen() {
       <DashboardLayout>
         {isLoading ? (
           <VStack h="100%" justifyContent="center" alignItems="center">
+            <WelcomeAlert user={user.nom} />
             <Spinner size={40} color="primary.200" />
           </VStack>
         ) : (
@@ -69,20 +70,11 @@ function HomeScreen() {
                 <Box borderBottomWidth="1" borderColor="coolGray.200" py="4">
                   <HStack space={3} justifyContent="space-between" alignItems="center">
                     {item.logo ? (
-                      <>
-                        <Image size="48px" source={{ uri: item.logo }} alt={`${item.nom} logo`} />
-                        <VStack>
-                          <Text>{item.nom}</Text>
-                          <Text>{item.phone}</Text>
-                        </VStack>
-                      </>
-                    ) : (
-                      <>
-                        <Text>{item.nom}</Text>
-                        <Text>{item.phone}</Text>
-                        <Icon as={EvilIcons} name="location" color="primary.200" size="26px" />
-                      </>
-                    )}
+                      <Image size="48px" source={{ uri: item.logo }} alt={`${item.nom} logo`} />
+                    ) : null}
+                    <Text>{item.nom}</Text>
+                    <Text>{item.phone}</Text>
+                    <Icon as={EvilIcons} name="location" color="primary.200" size="26px" />
                   </HStack>
                 </Box>
               </TouchableOpacity>

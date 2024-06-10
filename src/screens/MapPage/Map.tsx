@@ -1,57 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
-import * as Location from 'expo-location';
-import { Button } from 'native-base';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Platform, StyleSheet, View } from 'react-native';
+import coordinates from './coordinates.json';
+import { Box, Text } from 'native-base';
 
 export default function Map() {
+  const [selectedCompany, setSelectedCompany] = useState<any>(null);
   const [region, setRegion] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitude: 7.30966,
+    longitude: -5.41266,
+    latitudeDelta: 2.8,
+    longitudeDelta: 5.621,
   });
 
-  const userLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Permission to access Location was denied');
-    }
-
-    let location = await Location.getCurrentPositionAsync();
-
-    setRegion({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
-
-    console.log('My Coordinates', location.coords.latitude, location.coords.longitude);
-  };
-
-  useEffect(() => {
-    userLocation();
-  }, []);
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={region}>
-        <Marker coordinate={region} title="My Location" />
+      <MapView style={styles.map} initialRegion={region} provider={PROVIDER_GOOGLE}>
+        {coordinates.map((item, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={{ latitude: item.latitude, longitude: item.longitude }}
+              title={index.toString()}
+              description="Hello world"
+              onPress={() => setSelectedCompany(item)}
+            />
+          );
+        })}
       </MapView>
-      <Button onPress={userLocation} mt={2}>
-        Get Location
-      </Button>
+      {selectedCompany && (
+        <Box style={styles.infoBox}>
+          <Text style={styles.companyName}>Name</Text>
+          <Text>Description</Text>
+        </Box>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.9,
-    padding: 2,
+    flex: 1,
+    padding: 1,
   },
   map: {
     width: '100%',
     height: '100%',
+  },
+  infoBox: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    padding: 20,
+    borderRadius: 2,
+    margin: 1,
+    backgroundColor: 'white',
+  },
+  companyName: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

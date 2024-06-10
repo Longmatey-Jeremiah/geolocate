@@ -1,12 +1,12 @@
 import { Pressable, SafeAreaView } from 'react-native';
 import React from 'react';
-import { colors } from '../../components/theme';
+import { colors } from '../../../components/theme';
 import { Box, Divider, HStack, HamburgerIcon, Icon, Image, Menu, Text } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-import { setIsAuthenticated } from '../../store';
+import { setIsAuthenticated } from '../../../store';
 import { useDispatch } from 'react-redux';
-import { AVATAR } from '../../constants';
+import { AVATAR } from '../../../constants';
 
 interface HomeHeaderProps {
   title: string;

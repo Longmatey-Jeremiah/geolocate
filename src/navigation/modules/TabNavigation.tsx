@@ -54,6 +54,7 @@ function TabNavigation(props: any) {
     </Tab.Navigator>
   );
 }
+
 function TabItem({ name, navigation, icon, to }: any) {
   return (
     <TouchableOpacity

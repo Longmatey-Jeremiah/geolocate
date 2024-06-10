@@ -4,26 +4,43 @@
     "slug": "geolocate",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/geolocate-logo.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.longmatey.geolocate",
+      "config": {
+        "googleMapsApiKey": "AIzaSyC6GDRndBRuXSYcZSCWLflqUvT6j1HC4Ww"
+        }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCgo6-PsixMgJex9ZMOrhdHOIzrIGJD41g"
+        }
+      },
+      "package": "com.longmatey.geolocate"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "29ba36ca-c860-4bec-a808-3f9634711703"
+      }
     }
   }
 }

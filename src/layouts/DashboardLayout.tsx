@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           />
 
           <DismissKeyboard>
-            <Box h="100%" mx={5} py={2} mt={4}>
+            <Box h="100%" mx={5} py={2}>
               {children}
             </Box>
           </DismissKeyboard>
