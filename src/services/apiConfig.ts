@@ -5,7 +5,7 @@ import useStore from '../store';
 const config: AxiosRequestConfig = {
   baseURL: process.env.REACT_APP_API_URL || API_DOMAIN,
   responseType: 'json',
-  timeout: 40000,
+  timeout: 30000,
 };
 
 const axios = Axios.create(config);

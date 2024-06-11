@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "buildNumber": "1.0.0",
-      "bundleIdentifier": "com.longmatey.geolocate",
+      "bundleIdentifier": "com.jerrylongmatey.geolocate",
       "config": {
         "googleMapsApiKey": "AIzaSyC6GDRndBRuXSYcZSCWLflqUvT6j1HC4Ww"
         }

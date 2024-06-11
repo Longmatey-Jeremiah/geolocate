@@ -5,27 +5,33 @@ export interface Entreprise {
   nom: string;
   logo: string;
   phone: string;
+  latitude: number;
+  longitude: number;
 }
 
-const initialState = {
-  entreprise: {
-    id: 0,
-    nom: '',
-    logo: '',
-    phone: '',
-  },
+interface CompanyState {
+  companies: Entreprise[];
+  selectedCompany?: Entreprise | '';
+}
+
+const initialState: CompanyState = {
+  companies: [],
+  selectedCompany: '',
 };
 
-export const createCompanySlice = createSlice({
+export const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
-    setEntrepriseId: (state, { payload }) => {
-      state.entreprise.id = payload;
+    setCompanies: (state, { payload }: PayloadAction<Entreprise[]>) => {
+      state.companies = payload;
+    },
+    setSelectedCompany: (state, { payload }) => {
+      state.selectedCompany = payload;
     },
   },
 });
 
-export const { setEntrepriseId } = createCompanySlice.actions;
+export const { setCompanies, setSelectedCompany } = companySlice.actions;
 
-export default createCompanySlice.reducer;
+export default companySlice.reducer;

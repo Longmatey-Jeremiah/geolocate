@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, HStack, Text, VStack, Image, Icon, Spinner, Alert } from 'native-base';
+import { Box, HStack, Text, VStack, Image, Icon, Spinner } from 'native-base';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEntrepriseId } from '../../store';
 import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import { getCompanies } from '../../services';
 import { EvilIcons } from '@expo/vector-icons';
@@ -10,19 +9,14 @@ import { HomeHeader } from './components/HomeHeader';
 import { RouteNames } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { WelcomeAlert } from './components/WelcomeAlert';
-
-interface Company {
-  id: number;
-  nom: string;
-  logo: string;
-  phone: string;
-}
+import { setCompanies, setSelectedCompany } from '../../store/company.slice';
+import coordinates from '../MapPage/coordinates.json';
 
 function HomeScreen() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const data = useSelector((state) => state?.company.entreprise.id);
+  const data = useSelector((state) => state?.company.selectedCompany);
+  const companyList = useSelector((state) => state?.company.companies);
   const user = useSelector((state) => state?.auth.user);
   const navigation = useNavigation();
 
@@ -31,10 +25,11 @@ function HomeScreen() {
       setIsLoading(true);
       try {
         const response = await getCompanies();
-        // const map_response = response.forEach((item) => {
-        //   item;
-        // });
-        setCompanies(response._embedded.entrepriseDTOModelList);
+        const companyData = response._embedded.entrepriseDTOModelList.map((item, index) => ({
+          ...item,
+          ...coordinates[index],
+        }));
+        dispatch(setCompanies(companyData));
         setIsLoading(false);
       } catch (error) {
         console.log('Error', error);
@@ -45,10 +40,10 @@ function HomeScreen() {
     fetchCompanies();
   }, []);
 
-  const viewLocation = async (entrepriseId: number) => {
-    dispatch(setEntrepriseId(entrepriseId));
-    console.log('Entreprise Id:', data);
-    navigation.navigate(RouteNames.MAP);
+  const viewLocation = async (company: any) => {
+    dispatch(setSelectedCompany(company));
+    console.log('Company:', company);
+    await navigation.navigate(RouteNames.MAP);
   };
 
   return (
@@ -62,11 +57,11 @@ function HomeScreen() {
           </VStack>
         ) : (
           <FlatList
-            data={companies}
+            data={companyList}
             keyExtractor={(item) => item.id.toString()}
             ListHeaderComponent={<Text fontSize={26}>Companies</Text>}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => viewLocation(item.id)}>
+              <TouchableOpacity onPress={() => viewLocation(item)}>
                 <Box borderBottomWidth="1" borderColor="coolGray.200" py="4">
                   <HStack space={3} justifyContent="space-between" alignItems="center">
                     {item.logo ? (

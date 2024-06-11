@@ -19,7 +19,7 @@ const TabItems = [
     routeName: RouteNames.DASHBOARD,
   },
   {
-    icon: 'person',
+    icon: 'map',
     name: 'MAP',
     routeName: RouteNames.MAP,
   },
