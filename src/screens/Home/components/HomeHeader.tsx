@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView } from 'react-native';
+import { Platform, Pressable, SafeAreaView, StatusBar } from 'react-native';
 import React from 'react';
 import { colors } from '../../../components/theme';
 import { Box, Divider, HStack, HamburgerIcon, Icon, Image, Menu, Text } from 'native-base';
@@ -23,6 +23,12 @@ export const HomeHeader = ({ title, user }: HomeHeaderProps) => {
   return (
     <>
       <SafeAreaView style={{ flex: 0, backgroundColor: colors.primary['200'] }} />
+      <StatusBar
+        translucent
+        backgroundColor="black"
+        barStyle="light-content"
+        networkActivityIndicatorVisible={false}
+      />
       <HStack
         bg="black"
         px={6}
@@ -30,7 +36,7 @@ export const HomeHeader = ({ title, user }: HomeHeaderProps) => {
         alignItems="center"
         justifyContent="space-between"
         h="60px"
-        mt="25px"
+        mt={Platform.OS == 'ios' ? '0' : '25px'}
       >
         <Box>
           <Text color="white" fontSize="18px" fontWeight={600}>

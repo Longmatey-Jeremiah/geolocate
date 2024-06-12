@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Dimensions, Platform, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { colors } from '../../theme';
 import { Box, Divider, HStack, Icon, Image, Menu, Text } from 'native-base';
@@ -27,7 +27,7 @@ const Header = ({ title = '', icon, onPress }: { title?: string; icon?: any; onP
         alignItems="center"
         justifyContent="space-between"
         h="60px"
-        mt="25px"
+        mt={Platform.OS == 'ios' ? '0' : '25px'}
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon as={Ionicons} name="arrow-back-outline" color="white" />
